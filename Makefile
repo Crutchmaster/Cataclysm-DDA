@@ -72,7 +72,7 @@ else
   DEBUG = -g -D_GLIBCXX_DEBUG
 endif
 #PROFILE = -pg
-#OTHERS = -O3
+#OTHERS = -O2
 #DEFINES = -DNDEBUG
 
 # Disable debug. Comment this out to get logging.
@@ -179,7 +179,7 @@ ifndef RELEASE
   ifeq ($(shell $(CXX) -E -Og - < /dev/null > /dev/null 2>&1 && echo fog),fog)
     CXXFLAGS += -Og
   else
-    CXXFLAGS += -O0
+    CXXFLAGS += -O2
   endif
 endif
 
