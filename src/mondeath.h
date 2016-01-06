@@ -19,6 +19,7 @@ void rattle         (monster *z); // Rattles like a rattlesnake
 void worm           (monster *z); // Spawns 2 half-worms
 void disappear      (monster *z); // Hallucination disappears
 void guilt          (monster *z); // Morale penalty
+void satisfaction   (monster *z); // Morale bonus
 void brainblob      (monster *z); // Frees blobs, redirects to blobsplit
 void blobsplit      (monster *z); // Creates more blobs
 void jackson        (monster *z); // Reverts dancers

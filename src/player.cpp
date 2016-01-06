@@ -147,6 +147,9 @@ namespace {
 
             { _( "Got a Haircut" ) },
             { _( "Freshly Shaven" ) },
+
+            { _( "Depressed" ) },
+            { _( "Killing zombies" ) },
         } };
         if( static_cast<size_t>( id ) >= morale_data.size() ) {
             debugmsg( "invalid morale type: %d", id );
@@ -209,6 +212,9 @@ player::player() : Character()
  scent = 500;
  male = true;
  prof = profession::has_initialized() ? profession::generic() : NULL; //workaround for a potential structural limitation, see player::create
+
+ depr_morale = 0;
+ avg_morale = 0;
 
  start_location = "shelter";
  moves = 100;
@@ -5432,6 +5438,7 @@ inline int ticks_between( int from, int to, int tick_length )
 void player::update_body()
 {
     const int now = calendar::turn;
+    avg_morale += morale_level();
     update_body( now - 1, now );
 }
 
@@ -5461,6 +5468,15 @@ void player::update_body( int from, int to )
 
 void player::get_sick()
 {
+    // Depression
+
+    avg_morale /= 300;
+    depr_morale += (avg_morale > 0 ) ? 1 : has_effect("sleep") ? 0 : -1;
+    depr_morale = depr_morale > 50 ? 50 : depr_morale;
+    depr_morale = depr_morale < -250 ? -250 : depr_morale;
+    add_msg("Set depr: %d avg_morale: %d", depr_morale, avg_morale);
+    avg_morale = 0;
+
     // NPCs are too dumb to handle infections now
     if( is_npc() || has_trait("DISIMMUNE") ) {
         // In a shocking twist, disease immunity prevents diseases.
@@ -5630,6 +5646,16 @@ void player::check_needs_extremes()
 
 void player::update_needs( int rate_multiplier )
 {
+    // Psy health
+
+    int cur_morale = morale_level();
+    if (depr_morale < 0 && !has_effect("sleep") ) {
+        int depr_lvl = ( u.depr_morale + cur_morale ) / 2;
+        depr_lvl = depr_lvl < depr_morale ? depr_morale : depr_lvl;
+        if ( depr_lvl < 0 )
+             add_morale(MORALE_DEPRESSION, depr_lvl, depr_lvl, 6, 5, true);
+    }
+
     // Hunger, thirst, & fatigue up every 5 minutes
     const bool debug_ls = has_trait("DEBUG_LS");
     const bool has_recycler = has_bionic("bio_recycler");
@@ -12025,12 +12051,12 @@ void player::do_read( item *book )
         const int remain = book->get_remaining_chapters( *this );
         if( chapters > 0 && remain == 0 ) {
             //Book is out of chapters -> re-reading old book, less fun
-            add_msg(_("The %s isn't as much fun now that you've finished it."), book->tname().c_str());
+            add_msg(_("The %s isn't fun now that you've finished it."), book->tname().c_str());
             if( one_in(6) ) { //Don't nag incessantly, just once in a while
                 add_msg(m_info, _("Maybe you should find something new to read..."));
             }
-            //50% penalty
-            fun_bonus = (reading->fun * 5) / 2;
+            //No fun
+            fun_bonus = 0;
         } else {
             fun_bonus = reading->fun * 5;
         }

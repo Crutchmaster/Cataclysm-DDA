@@ -1563,6 +1563,8 @@ void monster::die(Creature* nkiller) {
         if( ( has_flag( MF_GUILT ) && ch->is_player() ) || ( ch->has_trait( "PACIFIST" ) && has_flag( MF_HUMAN ) ) ) {
             // has guilt flag or player is pacifist && monster is humanoid
             mdeath::guilt(this);
+        } else if (ch != nullptr && ch->is_player() && !u.has_trait("PACIFIST")) {
+            mdeath::satisfaction(this);
         }
         // TODO: add a kill counter to npcs?
         if( ch->is_player() ) {

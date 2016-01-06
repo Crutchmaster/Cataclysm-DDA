@@ -1051,6 +1051,11 @@ class player : public Character, public JsonSerializer, public JsonDeserializer
         void temp_equalizer(body_part bp1, body_part bp2); // Equalizes heat between body parts
         bool pda_cached;
 
+        //depression mod
+        int avg_morale;
+        int depr_morale;
+        int kill_bonus;
+
         // Drench cache
         enum water_tolerance {
             WT_IGNORED = 0,

@@ -340,6 +340,10 @@ void player::load(JsonObject &data)
         setID( tmpid );
     }
 
+    //depression data
+    data.read("avg_morale", avg_morale);
+    data.read("depr_morale", depr_morale);
+
     data.read("power_level", power_level);
     data.read("max_power_level", max_power_level);
     // Bionic power scale has been changed, savegame version 21 has the new scale
@@ -415,6 +419,10 @@ void player::store(JsonOut &json) const
     json.member( "recoil", int(recoil) );
     json.member( "in_vehicle", in_vehicle );
     json.member( "id", getID() );
+
+    // depression data
+    json.member( "avg_morale", avg_morale );
+    json.member( "depr_morale", depr_morale );
 
     // potential incompatibility with future expansion
     // todo: consider ["parts"]["head"]["hp_cur"] instead of ["hp_cur"][head_enum_value]

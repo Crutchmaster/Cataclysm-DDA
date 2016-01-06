@@ -345,6 +345,18 @@ void mdeath::guilt(monster *z)
 
 }
 
+void mdeath::satisfaction(monster *z) {
+    if (!z->type->in_species("ZOMBIE")) return;
+    int bonus = 1;
+    bonus += g->u.has_trait("PSYCHOPATH") ||
+        g->u.has_trait("PRED3") ||
+        g->u.has_trait("PRED4") ? 2 :
+        g->u.has_trait("PRED1") ||
+        g->u.has_trait("PRED2") ? 1 : 0;
+    int max_bonus = bonus * 50;
+    g->u.add_morale(MORALE_ZOMBIE_KILLING, bonus, max_bonus, 5, 3, true);
+}
+
 void mdeath::blobsplit(monster *z)
 {
     int speed = z->get_speed() - rng(30, 50);
