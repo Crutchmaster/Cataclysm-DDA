@@ -14,7 +14,7 @@ class item_location::impl
 protected:
     const item *what;
 public:
-    virtual ~impl() = default;
+    ~impl() = default;
     /** Removes the selected item from the game */
     virtual void remove_item() = 0;
     /** Gets the selected item or nullptr */
