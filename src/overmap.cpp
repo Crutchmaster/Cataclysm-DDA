@@ -4154,7 +4154,7 @@ void overmap::place_mongroups()
     for( auto &elem : cities ) {
         if( ACTIVE_WORLD_OPTIONS["WANDER_SPAWNS"] ) {
             if( !one_in( 16 ) || elem.s > 5 ) {
-                mongroup m( mongroup_id( "GROUP_ZOMBIE" ), ( elem.x * 2 ), ( elem.y * 2 ), 0, int( elem.s * 2.5 ),
+                mongroup m( mongroup_id( "GROUP_ZOMBIE" ), ( elem.x * 2 ), ( elem.y * 2 ), 0, int(elem.s * 3),
                             elem.s * 80 );
 //                m.set_target( zg.back().posx, zg.back().posy );
                 m.horde = true;
@@ -4164,7 +4164,7 @@ void overmap::place_mongroups()
         }
         if( !ACTIVE_WORLD_OPTIONS["STATIC_SPAWN"] ) {
             add_mon_group( mongroup( mongroup_id( "GROUP_ZOMBIE" ), ( elem.x * 2 ), ( elem.y * 2 ), 0,
-                                     int( elem.s * 2.5 ), elem.s * 80 ) );
+                                     int(elem.s * 3) , elem.s * 80 ) );
         }
     }
 
@@ -4556,60 +4556,44 @@ void overmap::add_mon_group(const mongroup &group)
     }
     // diffuse groups use a circular area, non-diffuse groups use a rectangular area
     const int rad = std::max<int>( 0, group.radius );
-    const double total_area = group.diffuse ? std::pow( rad + 1, 2 ) : ( rad * rad * M_PI + 1 );
-    const double pop = std::max<int>( 0, group.population );
-    int xpop = 0;
-    for( int x = -rad; x <= rad; x++ ) {
-        for( int y = -rad; y <= rad; y++ ) {
+    int pop = std::max<int>( 0, group.population );
+
+    std::map<int,std::vector<point>> aera_map;
+
+    for (int x = -rad; x <= rad; x++) {
+        for (int y = -rad; y <= rad; y++) {
             const int dist = group.diffuse ? square_dist( x, y, 0, 0 ) : trig_dist( x, y, 0, 0 );
-            if( dist > rad ) {
+            if (dist > rad) {
                 continue;
             }
-            // Population on a single submap, *not* a integer
-            double pop_here;
-            if( rad == 0 ) {
-                pop_here = pop;
-            } else if( group.diffuse ) {
-                pop_here = pop / total_area;
-            } else {
-                // non-diffuse groups are more dense towards the center.
-                pop_here = ( 1.0 - static_cast<double>( dist ) / rad ) * pop / total_area;
-            }
-            if( pop_here > pop || pop_here < 0 ) {
-                DebugLog( D_ERROR, D_GAME ) << group.type.str() << ": invalid population here: " << pop_here;
-            }
-            int p = std::max( 0, static_cast<int>(std::floor( pop_here )) );
-            if( pop_here - p != 0 ) {
-                // in case the population is something like 0.2, randomly add a
-                // single population unit, this *should* on average give the correct
-                // total population.
-                const int mod = static_cast<int>(10000.0 * ( pop_here - p ));
-                if( x_in_y( mod, 10000 ) ) {
-                    p++;
-                }
-            }
-            if( p == 0 ) {
-                continue;
-            }
-            // Exact copy to keep all important values, only change what's needed
-            // for a single-submap group.
-            mongroup tmp( group );
-            tmp.radius = 1;
-            tmp.pos.x += x;
-            tmp.pos.y += y;
-            tmp.population = p;
-            // This *can* create groups outside of the area of this overmap.
-            // As this function is called during generating the overmap, the
-            // neighboring overmaps might not have been generated and one can't access
-            // them through the overmapbuffer as this would trigger generating them.
-            // This would in turn to lead to a call to this function again.
-            // To avoid this, the overmapbufer checks the monster groups when loading
-            // an overmap and moves groups with out-of-bounds position to another overmap.
-            add_mon_group( tmp );
-            xpop += tmp.population;
+            aera_map[dist].push_back(point(x,y));
         }
     }
-    DebugLog( D_ERROR, D_GAME ) << group.type.str() << ": " << group.population << " => " << xpop;
+
+    while (pop > 0) {
+        point place_point(0, 0);
+        int new_pop = 0;
+        if (rad == 0) {
+            new_pop = pop;
+            pop = 0;
+        } else {
+            int place_rad = group.diffuse ? rng(0, rad) : std::min<int>(rng(0, rad), rng(0, rad));
+            int aera_size = aera_map[place_rad].size();
+
+            if ( aera_size > 0) {
+                new_pop = group.horde ? rng(5, 15) : rng(1, 4);
+                new_pop = std::min<int>(pop, new_pop);
+                pop -= new_pop;
+                place_point = aera_map[place_rad][rng(0, aera_size - 1)];
+                }
+        }
+        mongroup tmp( group );
+        tmp.radius = 1;
+        tmp.pos.x += place_point.x;
+        tmp.pos.y += place_point.y;
+        tmp.population = new_pop;
+        add_mon_group( tmp );
+    }
 }
 
 const point overmap::invalid_point = point(INT_MIN, INT_MIN);
