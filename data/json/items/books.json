@@ -14,7 +14,7 @@
         "volume" : 1,
         "bashing" : -3,
         "time" : 10,
-        "fun" : 1,
+        "fun" : 3,
         "skill" : "none",
         "price" : 400,
         "required_level" : 0,
@@ -145,7 +145,7 @@
         "volume" : 1,
         "bashing" : -3,
         "time" : 8,
-        "fun" : 1,
+        "fun" : 0,
         "skill" : "electronics",
         "price" : 450,
         "required_level" : 0
@@ -166,7 +166,7 @@
         "volume" : 1,
         "bashing" : -3,
         "time" : 8,
-        "fun" : 2,
+        "fun" : 0,
         "skill" : "mechanics",
         "price" : 450,
         "required_level" : 0
@@ -187,7 +187,7 @@
         "volume" : 1,
         "bashing" : -3,
         "time" : 8,
-        "fun" : 2,
+        "fun" : 0,
         "skill" : "survival",
         "price" : 450,
         "required_level" : 0
@@ -208,7 +208,7 @@
         "volume" : 1,
         "bashing" : -3,
         "time" : 8,
-        "fun" : 3,
+        "fun" : 0,
         "skill" : "survival",
         "price" : 450,
         "required_level" : 1
@@ -292,7 +292,7 @@
         "volume" : 1,
         "bashing" : -3,
         "time" : 8,
-        "fun" : 1,
+        "fun" : 0,
         "skill" : "bashing",
         "price" : 450,
         "required_level" : 0
@@ -333,7 +333,7 @@
         "volume" : 1,
         "bashing" : -3,
         "time" : 8,
-        "fun" : 1,
+        "fun" : 0,
         "skill" : "cutting",
         "price" : 450,
         "required_level" : 0
@@ -375,7 +375,7 @@
         "volume" : 1,
         "bashing" : -3,
         "time" : 8,
-        "fun" : 2,
+        "fun" : 0,
         "skill" : "melee",
         "price" : 450,
         "required_level" : 0
@@ -415,7 +415,7 @@
         "volume" : 1,
         "bashing" : -3,
         "time" : 8,
-        "fun" : 1,
+        "fun" : 0,
         "skill" : "stabbing",
         "price" : 450,
         "required_level" : 0
@@ -436,7 +436,7 @@
         "volume" : 1,
         "bashing" : -3,
         "time" : 8,
-        "fun" : 1,
+        "fun" : 0,
         "skill" : "unarmed",
         "price" : 450,
         "required_level" : 0
@@ -457,7 +457,7 @@
         "volume" : 1,
         "bashing" : -3,
         "time" : 8,
-        "fun" : 1,
+        "fun" : 0,
         "skill" : "launcher",
         "price" : 450,
         "required_level" : 0
@@ -498,7 +498,7 @@
         "volume" : 1,
         "bashing" : -3,
         "time" : 8,
-        "fun" : 1,
+        "fun" : 0,
         "skill" : "pistol",
         "price" : 450,
         "required_level" : 0
@@ -540,7 +540,7 @@
         "volume" : 1,
         "bashing" : -3,
         "time" : 8,
-        "fun" : 1,
+        "fun" : 0,
         "skill" : "rifle",
         "price" : 450,
         "required_level" : 0
@@ -580,7 +580,7 @@
         "volume" : 1,
         "bashing" : -3,
         "time" : 8,
-        "fun" : 1,
+        "fun" : 0,
         "skill" : "shotgun",
         "price" : 450,
         "required_level" : 0
@@ -620,7 +620,7 @@
         "volume" : 1,
         "bashing" : -3,
         "time" : 8,
-        "fun" : 1,
+        "fun" : 0,
         "skill" : "smg",
         "price" : 450,
         "required_level" : 0
@@ -720,7 +720,7 @@
         "volume" : 8,
         "bashing" : 8,
         "time" : 55,
-        "fun" : 1,
+        "fun" : 0,
         "skill" : "survival",
         "price" : 920, "//" : "Since it's a novel, price point is much more reasonable.",
         "required_level" : 5
@@ -762,7 +762,7 @@
         "volume" : 1,
         "bashing" : -3,
         "time" : 8,
-        "fun" : 1,
+        "fun" : 0,
         "skill" : "speech",
         "price" : 400,
         "required_level" : 0
@@ -785,7 +785,8 @@
         "fun" : 2,
         "skill" : "none",
         "price" : 400,
-        "required_level" : 0
+        "required_level" : 0,
+        "chapters" : 4
     },
     {
         "type" : "BOOK",
@@ -805,7 +806,8 @@
         "fun" : 1,
         "skill" : "none",
         "price" : 350,
-        "required_level" : 0
+        "required_level" : 0,
+        "chapters" : 4
     },
     {
         "type" : "BOOK",
@@ -822,7 +824,7 @@
         "volume" : 1,
         "bashing" : -3,
         "time" : 8,
-        "fun" : 1,
+        "fun" : 0,
         "skill" : "driving",
         "price" : 450,
         "required_level" : 0
@@ -842,7 +844,7 @@
         "volume" : 1,
         "bashing" : -3,
         "time" : 8,
-        "fun" : 1,
+        "fun" : 0,
         "skill" : "cooking",
         "price" : 450,
         "required_level" : 0
@@ -862,7 +864,7 @@
         "volume" : 2,
         "bashing" : -3,
         "time" : 24,
-        "fun" : 1,
+        "fun" : 0,
         "skill" : "cooking",
         "price" : 450,
         "required_level" : 0
@@ -882,7 +884,7 @@
         "volume" : 2,
         "bashing" : -3,
         "time" : 24,
-        "fun" : 1,
+        "fun" : 0,
         "skill" : "tailor",
         "price" : 450,
         "required_level" : 0
@@ -903,7 +905,7 @@
         "volume" : 2,
         "bashing" : -3,
         "time" : 24,
-        "fun" : 1,
+        "fun" : 0,
         "skill" : "survival",
         "price" : 450,
         "required_level" : 0
@@ -924,7 +926,7 @@
         "volume" : 1,
         "bashing" : -3,
         "time" : 8,
-        "fun" : 1,
+        "fun" : 0,
         "skill" : "carpentry",
         "price" : 450,
         "required_level" : 0
@@ -944,7 +946,7 @@
         "volume" : 1,
         "bashing" : -3,
         "time" : 7,
-        "fun" : 1,
+        "fun" : 0,
         "skill" : "gun",
         "price" : 480,
         "required_level" : 0
@@ -1005,7 +1007,7 @@
         "volume" : 1,
         "bashing" : -3,
         "time" : 7,
-        "fun" : 1,
+        "fun" : 0,
         "skill" : "archery",
         "price" : 480,
         "required_level" : 0
@@ -1108,7 +1110,8 @@
         "fun" : 2,
         "skill" : "none",
         "price" : 300,
-        "required_level" : 0
+        "required_level" : 0,
+        "chapters" : 4
     },
     {
         "type" : "BOOK",
@@ -1128,7 +1131,8 @@
         "fun" : 2,
         "skill" : "none",
         "price" : 300,
-        "required_level" : 0
+        "required_level" : 0,
+        "chapters" : 4
     },
     {
         "type" : "BOOK",
@@ -1146,7 +1150,7 @@
         "volume" : 1,
         "bashing" : -3,
         "time" : 8,
-        "fun" : 1,
+        "fun" : 0,
         "skill" : "firstaid",
         "price" : 480,
         "required_level" : 0
@@ -1167,7 +1171,7 @@
         "volume" : 1,
         "bashing" : -3,
         "time" : 8,
-        "fun" : 1,
+        "fun" : 0,
         "skill" : "dodge",
         "price" : 490,
         "required_level" : 0
@@ -1209,7 +1213,7 @@
         "volume" : 1,
         "bashing" : -3,
         "time" : 8,
-        "fun" : 1,
+        "fun" : 0,
         "skill" : "throw",
         "price" : 480,
         "required_level" : 0
@@ -1250,7 +1254,7 @@
         "volume" : 1,
         "bashing" : -3,
         "time" : 8,
-        "fun" : 1,
+        "fun" : 0,
         "skill" : "swimming",
         "price" : 460,
         "required_level" : 0
@@ -1710,7 +1714,7 @@
         "volume" : 2,
         "bashing" : -2,
         "time" : 18,
-        "fun" : 1,
+        "fun" : 3,
         "skill" : "none",
         "price" : 750,
         "required_level" : 0,
@@ -2358,7 +2362,7 @@
         "volume" : 1,
         "bashing" : -3,
         "time" : 8,
-        "fun" : 2,
+        "fun" : 0,
         "skill" : "tailor",
         "price" : 400,
         "required_level" : 0
@@ -2731,7 +2735,7 @@
         "volume" : 6,
         "bashing" : 4,
         "time" : 15,
-        "fun" : 1,
+        "fun" : 0,
         "skill" : "cooking",
         "price" : 4950,
         "required_level" : 2
@@ -2751,7 +2755,7 @@
         "volume" : 5,
         "bashing" : 5,
         "time" : 45,
-        "fun" : 1,
+        "fun" : 0,
         "skill" : "cooking",
         "price" : 1950,
         "required_level" : 1
@@ -3023,6 +3027,7 @@
         "bashing" : 3,
         "time" : 30,
         "fun" : 2,
+        "chapters": 2,
         "skill" : "none",
         "price" : 2900,
         "required_level" : 0,
@@ -3107,7 +3112,7 @@
         "volume" : 1,
         "bashing" : -3,
         "time" : 8,
-        "fun" : 2,
+        "fun" : 0,
         "skill" : "fabrication",
         "price" : 450,
         "required_level" : 0
@@ -3128,7 +3133,7 @@
         "volume" : 3,
         "bashing" : -3,
         "time" : 16,
-        "fun" : 1,
+        "fun" : 0,
         "skill" : "fabrication",
         "price" : 2200,
         "required_level" : 0
@@ -3330,7 +3335,7 @@
         "volume" : 2,
         "price" : 84000,
         "time" : 45,
-        "fun" : 1,
+        "fun" : 0,
         "skill" : "fabrication",
         "max_level" : 7,
         "required_level" : 6,
@@ -3498,7 +3503,7 @@
         "volume" : 2,
         "price" : 3000,
         "time" : 45,
-        "fun" : 1,
+        "fun" : 0,
         "skill" : "electronics",
         "max_level" : 5,
         "required_level" : 4,
@@ -3540,7 +3545,7 @@
         "volume" : 2,
         "price" : 74000,
         "time" : 45,
-        "fun" : 1,
+        "fun" : 0,
         "skill" : "electronics",
         "max_level" : 7,
         "required_level" : 6,
@@ -3561,7 +3566,7 @@
         "volume" : 2,
         "price" : 5000,
         "time" : 45,
-        "fun" : 1,
+        "fun" : 0,
         "skill" : "driving",
         "max_level" : 4,
         "required_level" : 0,
@@ -3582,7 +3587,7 @@
         "volume" : 2,
         "price" : 2000,
         "time" : 30,
-        "fun" : 2,
+        "fun" : 0,
         "skill" : "driving",
         "max_level" : 3,
         "required_level" : 0,
