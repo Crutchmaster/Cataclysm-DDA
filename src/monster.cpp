@@ -717,6 +717,10 @@ void monster::process_triggers()
         }
     }
 
+    if (hp_percentage() < 33 && type->in_species( MAMMAL ) && morale > -20 ) {
+        morale = -20;
+    }
+
     if( anger != type->agro && one_in( 10 ) ) {
         if( anger < type->agro ) {
             anger++;
@@ -1166,7 +1170,7 @@ void monster::apply_damage(Creature* source, body_part /*bp*/, int dam) {
     if( hp < 1 ) {
         set_killer( source );
     } else if( dam > 0 ) {
-        process_trigger( MTRIG_HURT, 1 + int( dam / 3 ) );
+        process_trigger( MTRIG_HURT, 1 + int( dam / 2 ) );
     }
 }
 
@@ -1563,7 +1567,7 @@ void monster::die(Creature* nkiller) {
         if( ( has_flag( MF_GUILT ) && ch->is_player() ) || ( ch->has_trait( "PACIFIST" ) && has_flag( MF_HUMAN ) ) ) {
             // has guilt flag or player is pacifist && monster is humanoid
             mdeath::guilt(this);
-        } else if (ch != nullptr && ch->is_player() && !u.has_trait("PACIFIST")) {
+        } else if (ch != nullptr && ch->is_player() && !ch->has_trait("PACIFIST")) {
             mdeath::satisfaction(this);
         }
         // TODO: add a kill counter to npcs?
