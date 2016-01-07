@@ -562,7 +562,7 @@
     "flags":["SEES", "HEARS", "SMELLS", "ANIMAL", "WARM", "FUR", "HIT_AND_RUN", "KEENNOSE", "BLEED", "BONES"],
     "anger_triggers":["FRIEND_ATTACKED", "FRIEND_DIED"],
     "placate_triggers":["MEAT"],
-    "fear_triggers":["SOUND", "PLAYER_CLOSE"],
+    "fear_triggers":["SOUND", "PLAYER_CLOSE", "HURT"],
     "categories":["WILDLIFE"]
     },{
     "type" : "MONSTER",
@@ -594,7 +594,7 @@
     "flags":["SEES", "HEARS", "SMELLS", "ANIMAL", "WARM", "FUR", "HIT_AND_RUN", "KEENNOSE", "BLEED", "BONES", "FAT"],
     "anger_triggers":["FRIEND_ATTACKED", "FRIEND_DIED"],
     "placate_triggers":["MEAT"],
-    "fear_triggers":["SOUND", "PLAYER_CLOSE"],
+    "fear_triggers":["SOUND", "PLAYER_CLOSE", "HURT"],
     "categories":["WILDLIFE"]
     },{
     "type" : "MONSTER",
