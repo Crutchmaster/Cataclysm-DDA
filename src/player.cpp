@@ -5650,7 +5650,7 @@ void player::update_needs( int rate_multiplier )
 
     int cur_morale = morale_level();
     if (depr_morale < 0 && !has_effect("sleep") ) {
-        int depr_lvl = ( u.depr_morale + cur_morale ) / 2;
+        int depr_lvl = ( depr_morale + cur_morale ) / 2;
         depr_lvl = depr_lvl < depr_morale ? depr_morale : depr_lvl;
         if ( depr_lvl < 0 )
              add_morale(MORALE_DEPRESSION, depr_lvl, depr_lvl, 6, 5, true);

@@ -346,7 +346,7 @@ void mdeath::guilt(monster *z)
 }
 
 void mdeath::satisfaction(monster *z) {
-    if (!z->type->in_species("ZOMBIE")) return;
+    if (!z->type->in_species( ZOMBIE )) return;
     int bonus = 1;
     bonus += g->u.has_trait("PSYCHOPATH") ||
         g->u.has_trait("PRED3") ||
