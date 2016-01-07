@@ -187,7 +187,7 @@ itype_id mtype::get_meat_itype() const
             return "bone_tainted";
         } else if( has_material("iflesh") ) {
             //In the future, insects could drop insect flesh rather than plain ol' meat.
-            return "meat";
+            return "meat_tainted";
         } else if( has_material("veggy") ) {
             return "veggy";
         }
