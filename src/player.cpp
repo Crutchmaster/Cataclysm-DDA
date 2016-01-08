@@ -12978,9 +12978,9 @@ bool player::armor_absorb(damage_unit& du, item& armor) {
     const int raw_dmg = du.amount;
     const int raw_armor = res.type_resist( du.type );
     if( (raw_dmg > raw_armor && !one_in(du.amount) && one_in(2)) ||
-        // or if it isn't, but 1/50 chance
+        // or if it isn't, but 1/20 chance
         (raw_dmg <= raw_armor && !armor.has_flag("STURDY") &&
-         !armor.is_power_armor() && one_in(200)) ) {
+         !armor.is_power_armor() && one_in(20)) ) {
 
         auto &material = armor.get_random_material();
         std::string damage_verb = ( du.type == DT_BASH ) ?
