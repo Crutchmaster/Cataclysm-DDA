@@ -717,16 +717,17 @@ void monster::process_triggers()
         }
     }
 
-    if (hp_percentage() < 33 && type->in_species( MAMMAL ) && morale > -20 ) {
-        morale = -20;
-    }
-
     if( anger != type->agro && one_in( 10 ) ) {
         if( anger < type->agro ) {
             anger++;
         } else {
             anger--;
         }
+    }
+
+    if ( hp_percentage() < 50 && type->in_species( MAMMAL ) && morale > -50 ) {
+        morale = -50;
+        anger = -20;
     }
 
     // Cap values at [-100, 100] to prevent perma-angry moose etc.
