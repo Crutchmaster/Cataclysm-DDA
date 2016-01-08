@@ -1125,25 +1125,27 @@ void player::update_bodytemp()
         if( has_effect("cold", (body_part)i) || has_effect("hot", (body_part)i) ) {
             int cold_int = get_effect_int("cold", (body_part)i);
             int hot_int = get_effect_int("hot", (body_part)i);
+
             int intensity_mult = hot_int - cold_int;
+            intensity_mult -= intensity_mult > 0 ? 1 : 0;
 
             switch (i) {
             case bp_head:
             case bp_torso:
             case bp_mouth:
-                morale_pen += 2 * intensity_mult;
+                morale_pen += 3 * intensity_mult;
                 break;
             case bp_arm_l:
             case bp_arm_r:
             case bp_leg_l:
             case bp_leg_r:
-                morale_pen += .5 * intensity_mult;
+                morale_pen += 1.5 * intensity_mult;
                 break;
             case bp_hand_l:
             case bp_hand_r:
             case bp_foot_l:
             case bp_foot_r:
-                morale_pen += .5 * intensity_mult;
+                morale_pen += 1.5 * intensity_mult;
                 break;
             }
         }
@@ -5471,7 +5473,9 @@ void player::get_sick()
     // Depression
 
     avg_morale /= 300;
-    depr_morale += (avg_morale > 0 ) ? 1 : has_effect("sleep") ? 0 : -1;
+    depr_morale += (avg_morale > 10 ) ? 1 :
+        avg_morale > 0 ? 0 :
+        has_effect("sleep") ? 0 : -1;
     depr_morale = depr_morale > 50 ? 50 : depr_morale;
     depr_morale = depr_morale < -250 ? -250 : depr_morale;
     add_msg("Set depr: %d avg_morale: %d", depr_morale, avg_morale);
