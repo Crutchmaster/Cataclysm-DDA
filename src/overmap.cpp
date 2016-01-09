@@ -1802,7 +1802,7 @@ void overmap::draw(WINDOW *w, WINDOW *wbar, const tripoint &center,
                     for( auto &mgp : groups ) {
                         if( mgp->type == mongroup_id( "GROUP_FOREST" ) ) {
                             // Don't flood the map with forest creatures.
-                            continue;
+                            //continue;
                         }
                         if( mgp->horde ) {
                             // Hordes show as +
