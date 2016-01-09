@@ -2726,7 +2726,7 @@
     {"id":"CONTAIN","level":1,"amount":1}
   ], "components": [
     [
-      [ "cattail_rhizome", 1 ]
+      [ "cattail_rhizome", 3 ]
     ]
   ]
 },{
