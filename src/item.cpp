@@ -4246,7 +4246,7 @@ bool item::flammable() const
     }
 
     int vol = volume();
-    if( ( made_of( "wood" ) || made_of( "veggy" ) ) && ( burnt < 1 || vol <= 10 ) ) {
+    if( ( made_of( "wood" ) || made_of( "veggy" ) ) && ( /*burnt < 1 ||*/ vol <= 1 ) ) {
         return true;
     }
 
