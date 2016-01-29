@@ -709,18 +709,18 @@ void Creature::deal_damage_handle_type(const damage_unit &du, body_part, int &da
         break;
     case DT_HEAT: // heat damage sets us on fire sometimes
         damage += adjusted_damage;
-        pain += adjusted_damage / 4;
+        pain += adjusted_damage / 3;
         if( rng(0, 100) < adjusted_damage ) {
             add_effect("onfire", rng(1, 3));
         }
         break;
     case DT_ELECTRIC: // Electrical damage adds a major speed/dex debuff
-        damage += adjusted_damage;
+        damage += adjusted_damage / 3;
         pain += adjusted_damage / 4;
         add_effect( "zapped", std::max( adjusted_damage, 2 ) );
         break;
     case DT_COLD: // cold damage slows us a bit and hurts less
-        damage += adjusted_damage;
+        damage += adjusted_damage / 2;
         pain += adjusted_damage / 6;
         mod_moves(-adjusted_damage * 80);
         break;
