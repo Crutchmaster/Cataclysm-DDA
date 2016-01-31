@@ -352,6 +352,7 @@ public:
     int dist_from_city( const tripoint &p );
     void signal_hordes( const tripoint &p, int sig_power );
     void process_mongroups();
+    void spawn_hordes();
     void move_hordes();
 
     static bool obsolete_terrain( const std::string &ter );

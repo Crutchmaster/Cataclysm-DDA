@@ -1969,9 +1969,11 @@ void overmap::draw(WINDOW *w, WINDOW *wbar, const tripoint &center,
                 }
                 mvwprintz(wbar, line_number++, 3,
                           c_blue, "  Interest: %d", mgroup->interest);
-                mvwprintz(wbar, line_number, 3,
+                mvwprintz(wbar, line_number++, 3,
                           c_blue, "  Target: %d, %d", mgroup->target.x, mgroup->target.y);
                 mvwprintz(wbar, line_number++, 3,
+                          c_blue, "  Behaviour: %s", mgroup->horde_behaviour.c_str());
+                mvwprintz(wbar, line_number, 3,
                           c_red, "x");
             }
         } else {
@@ -1997,6 +1999,10 @@ void overmap::draw(WINDOW *w, WINDOW *wbar, const tripoint &center,
                       _(" - Place Overmap Terrain")).c_str());
             mvwprintz(wbar, 14, 1, c_ltblue, (inp_ctxt->get_desc("PLACE_SPECIAL") +
                       _(" - Place Overmap Special")).c_str());
+        }
+        if (data.debug_mongroup) {
+             mvwprintz(wbar, 12, 1, c_ltblue, (inp_ctxt->get_desc("MOVE_HORDES") +
+                      _(" - Move hordes")).c_str());
         }
         mvwprintz(wbar, 15, 1, c_magenta, (inp_ctxt->get_desc("CENTER") +
                   _(" - Center map on character")).c_str());
@@ -2120,6 +2126,9 @@ tripoint overmap::draw_overmap(const tripoint &orig, const draw_data_t &data)
     if( data.debug_editor ) {
         ictxt.register_action( "PLACE_TERRAIN" );
         ictxt.register_action( "PLACE_SPECIAL" );
+    }
+    if (data.debug_mongroup) {
+        ictxt.register_action( "MOVE_HORDES" );
     }
     ictxt.register_action("QUIT");
     std::string action;
@@ -2377,6 +2386,8 @@ tripoint overmap::draw_overmap(const tripoint &orig, const draw_data_t &data)
                 delwin( w_editor );
                 action = "";
             }
+        } else if (action == "MOVE_HORDES") {
+            overmap_buffer.move_hordes();
         } else if (action == "TIMEOUT") {
             if (uistate.overmap_blinking) {
                 uistate.overmap_show_overlays = !uistate.overmap_show_overlays;
@@ -2438,9 +2449,13 @@ void mongroup::wander( overmap &om )
 {
     const city *target_city = nullptr;
     int target_distance = 0;
+    if( horde_behaviour == "roam" && one_in(3)) {
+        horde_behaviour = "travel";
+    }
 
     if( horde_behaviour == "city" ) {
         // Find a nearby city to return to..
+
         for(const city &check_city : om.cities ) {
             // Check if this is the nearest city so far.
             int distance = rl_dist( check_city.x * 2, check_city.y * 2, pos.x, pos.y );
@@ -2449,24 +2464,47 @@ void mongroup::wander( overmap &om )
                 target_city = &check_city;
             }
         }
+    } else if ( horde_behaviour == "travel" ) {
+        int cnt = om.cities.size();
+        if (!target_city) {
+            target_city = &om.cities[rng(0,cnt-1)];
+        }
+    } else {
+        target.x = pos.x + rng(-5, 5);
+        target.y = pos.y + rng(-5, 5);
+        interest = 30;
     }
 
     if( target_city ) {
         // TODO: somehow use the same algorithm that distributes zombie
         // density at world gen to spread the hordes over the actual
         // city, rather than the center city tile
-        target.x = target_city->x * 2 + rng( -5, 5 );
-        target.y = target_city->y * 2 + rng( -5, 5 );
+        target.x = target_city->x * 2 + rng( -10, 10 );
+        target.y = target_city->y * 2 + rng( -10, 10 );
         interest = 100;
-    } else {
-        target.x = pos.x + rng( -10, 10 );
-        target.y = pos.y + rng( -10, 10 );
-        interest = 30;
+    }
+}
+
+void overmap::spawn_hordes() {
+
+    tripoint pl_pos = g->u.global_omt_location();
+    for( auto ci = roads_out.begin(); ci != roads_out.end(); ci++) {
+        if (one_in(10)) {
+            if (trig_dist(ci->x,ci->y,pl_pos.x,pl_pos.y) > 25) {
+                mongroup m(mongroup_id( "GROUP_ZOMBIE" ), ci->x*2, ci->y*2, 0, 1, rng(8,20));
+                m.horde = true;
+                m.horde_behaviour = one_in(3) ? "travel" : "roam";
+                m.interest = 50;
+                m.wander(*this);
+                add_mon_group(m);
+            }
+        }
     }
 }
 
 void overmap::move_hordes()
 {
+    if (one_in(2)) spawn_hordes();
     // Prevent hordes to be moved twice by putting them in here after moving.
     decltype(zg) tmpzg;
     //MOVE ZOMBIE GROUPS
@@ -2482,10 +2520,21 @@ void overmap::move_hordes()
         }
 
         // Gradually decrease interest.
-        mg.dec_interest( 1 );
+        if (mg.horde_behaviour == "roam") {
+            mg.dec_interest( one_in(2) ? 1 : 0);
+        } else {
+            mg.dec_interest( 1 );
+        }
 
         if( (mg.pos.x == mg.target.x && mg.pos.y == mg.target.y) || mg.interest <= 15 ) {
             mg.wander(*this);
+        }
+
+        tripoint pl = g->u.global_omt_location();
+        if ( abs(mg.pos.x - pl.x * 2) < 5 && abs(mg.pos.y - pl.y * 2) < 5 && pl.z == 0) {
+            mg.target.x = pl.x * 2 + rng(-3, 3);
+            mg.target.y = pl.y * 2 + rng(-3, 3);
+            mg.interest = 40;
         }
 
         // Decrease movement chance according to the terrain we're currently on.
