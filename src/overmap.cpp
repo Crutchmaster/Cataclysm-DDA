@@ -888,6 +888,7 @@ void overmap::init_layers()
                 layer[z].terrain[i][j] = default_type;
                 layer[z].visible[i][j] = false;
                 layer[z].explored[i][j] = false;
+                layer[z].pl_track[i][j] = false;
             }
         }
     }
@@ -937,6 +938,15 @@ bool overmap::is_explored(int const x, int const y, int const z) const
         return false;
     }
     return layer[z + OVERMAP_DEPTH].explored[x][y];
+}
+
+bool &overmap::track(int x, int y)
+{
+    if (x < 0 || x >= OMAPX || y < 0 || y >= OMAPY) {
+        nullbool = false;
+        return nullbool;
+    }
+    return layer[0].pl_track[x][y];
 }
 
 bool overmap::mongroup_check(const mongroup &candidate) const
@@ -1708,6 +1718,7 @@ void overmap::draw(WINDOW *w, WINDOW *wbar, const tripoint &center,
                 // Only load terrain if we can actually see it
                 cur_ter = overmap_buffer.ter(omx, omy, z);
             }
+            const bool has_track = overmap_buffer.track(omx, omy, z);
 
             tripoint const cur_pos {omx, omy, z};
             // Check if location is within player line-of-sight
@@ -1717,6 +1728,9 @@ void overmap::draw(WINDOW *w, WINDOW *wbar, const tripoint &center,
                 // Display player pos, should always be visible
                 ter_color = g->u.symbol_color();
                 ter_sym   = '@';
+            } else if (blink && has_track && data.debug_mongroup) {
+                ter_color = c_red;
+                ter_sym   = ':';
             } else if( data.debug_weather && get_weather_glyph( point( omx, omy ), ter_color, ter_sym ) ) {
                 // ter_color and ter_sym have been set by get_weather_glyph
             } else if( blink && has_target && omx == target.x && omy == target.y ) {
@@ -1973,6 +1987,8 @@ void overmap::draw(WINDOW *w, WINDOW *wbar, const tripoint &center,
                           c_blue, "  Target: %d, %d", mgroup->target.x, mgroup->target.y);
                 mvwprintz(wbar, line_number++, 3,
                           c_blue, "  Behaviour: %s", mgroup->horde_behaviour.c_str());
+                mvwprintz(wbar, line_number++, 3,
+                          c_blue, "  Heading: %d;%d", mgroup->direction.x, mgroup->direction.y);
                 mvwprintz(wbar, line_number, 3,
                           c_red, "x");
             }
@@ -2449,6 +2465,7 @@ void mongroup::wander( overmap &om )
 {
     const city *target_city = nullptr;
     int target_distance = 0;
+    if( horde_behaviour == "roam" && one_in(10)) {
     if( horde_behaviour == "roam" && one_in(3)) {
         horde_behaviour = "travel";
     }
@@ -2468,6 +2485,14 @@ void mongroup::wander( overmap &om )
         int cnt = om.cities.size();
         if (!target_city) {
             target_city = &om.cities[rng(0,cnt-1)];
+        }
+    } else if( horde_behaviour == "track") {
+        if (!one_in(10)) {
+            target.x += direction.x;
+            target.y += direction.y;
+            interest = 60;
+        } else {
+            horde_behaviour = "roam";
         }
     } else {
         target.x = pos.x + rng(-5, 5);
@@ -2525,6 +2550,24 @@ void overmap::move_hordes()
         } else {
             mg.dec_interest( 1 );
         }
+        // Search tracks
+        point om_coord(mg.pos.x / 2, mg.pos.y / 2);
+        bool tr;
+        for (int y = -1; y <= 1; y++ ) {
+            for (int x = -1; x <= 1; x++ ) {
+                tr = overmap_buffer.track(om_coord.x + x, om_coord.y + y, 0);
+                if (tr) {
+                    if (x == 0 && y == 0) {
+                        track(om_coord.x, om_coord.y) = false;
+                    } else {
+                        mg.target.x = (om_coord.x + x) * 2;
+                        mg.target.y = (om_coord.y + y) * 2;
+                        mg.horde_behaviour = "track";
+                        mg.interest = 60;
+                    }
+                }
+            }
+        }
 
         if( (mg.pos.x == mg.target.x && mg.pos.y == mg.target.y) || mg.interest <= 15 ) {
             mg.wander(*this);
@@ -2547,6 +2590,7 @@ void overmap::move_hordes()
         } else if(walked_into == ot_river_center) {
             movement_chance = 10;
         }
+        mg.update_direction();
 
         if( one_in(movement_chance) && rng(0, 100) < mg.interest ) {
             // TODO: Adjust for monster speed.
@@ -2629,6 +2673,34 @@ void overmap::move_hordes()
 
             // Delete the monster, continue iterating.
             monster_map_it = monster_map.erase(monster_map_it);
+        }
+    }
+}
+
+void overmap::update_tracks() {
+    for (int j = 0; j < OMAPY; j++) {
+        for (int i = 0; i < OMAPX; i++) {
+            if (layer[0].pl_track[i][j]) {
+                point abs =  point( i * SEEX * 2, j * SEEY * 2 );
+                weather_type weather = g->weather_gen->get_weather_conditions( abs, calendar::turn );
+                int factor = 10;
+                switch (weather) {
+                    case WEATHER_CLOUDY: factor = 20; break;
+                    case WEATHER_DRIZZLE: factor = 25; break;
+                    case WEATHER_RAINY:
+                    case WEATHER_THUNDER:
+                    case WEATHER_LIGHTNING: factor = 3; break;
+                    case WEATHER_ACID_DRIZZLE:
+                    case WEATHER_ACID_RAIN: factor = 1; break;
+                    case WEATHER_FLURRIES: factor = 15; break;
+                    case WEATHER_SNOW: factor = 12; break;
+                    case WEATHER_SNOWSTORM: factor = 6; break;
+                    default: factor = 10;
+                }
+                if (one_in(factor)) {
+                    layer[0].pl_track[i][j] = false;
+                }
+            }
         }
     }
 }

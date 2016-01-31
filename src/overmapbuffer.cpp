@@ -337,6 +337,16 @@ void overmapbuffer::move_hordes()
     }
 }
 
+void overmapbuffer::update_tracks()
+{
+    // arbitrary radius to include nearby overmaps (aside from the current one)
+    const auto radius = MAPSIZE * 2;
+    const auto center = g->u.global_sm_location();
+    for( auto &om : get_overmaps_near( center, radius ) ) {
+        om->update_tracks();
+    }
+}
+
 std::vector<mongroup*> overmapbuffer::monsters_at(int x, int y, int z)
 {
     // (x,y) are overmap terrain coordinates, they spawn 2x2 submaps,
@@ -416,6 +426,12 @@ bool overmapbuffer::seen(int x, int y, int z)
 {
     const overmap *om = get_existing_om_global(x, y);
     return (om != NULL) && const_cast<overmap*>(om)->seen(x, y, z);
+}
+
+bool overmapbuffer::track(int x, int y, int z)
+{
+    const overmap *om = get_existing_om_global(x, y);
+    return (om != NULL) && (z == 0) && const_cast<overmap*>(om)->track(x, y);
 }
 
 void overmapbuffer::set_seen(int x, int y, int z, bool seen)

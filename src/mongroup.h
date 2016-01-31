@@ -85,6 +85,7 @@ struct MonsterGroup {
 struct mongroup : public JsonSerializer, public JsonDeserializer {
     mongroup_id type;
     tripoint pos;
+    point direction;
     unsigned int radius;
     unsigned int population;
     tripoint target; // location the horde is interested in.
@@ -130,6 +131,11 @@ struct mongroup : public JsonSerializer, public JsonDeserializer {
     {
         target.x = x;
         target.y = y;
+    }
+    void update_direction()
+    {
+        direction.x = pos.x < target.x ? 1 : pos.x > target.x ? -1 : 0;
+        direction.y = pos.y < target.y ? 1 : pos.y > target.y ? -1 : 0;
     }
     void wander(overmap&);
     void inc_interest(int inc)

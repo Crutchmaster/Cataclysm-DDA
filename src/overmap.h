@@ -178,6 +178,7 @@ struct map_layer {
     oter_id terrain[OMAPX][OMAPY];
     bool visible[OMAPX][OMAPY];
     bool explored[OMAPX][OMAPY];
+    bool pl_track[OMAPX][OMAPY];
     std::vector<om_note> notes;
 };
 
@@ -215,6 +216,7 @@ class overmap
     const oter_id get_ter(const int x, const int y, const int z) const;
     bool&   seen(int x, int y, int z);
     bool&   explored(int x, int y, int z);
+    bool&   track(int x, int y);
     bool is_road_or_highway(int x, int y, int z);
     bool is_explored(int const x, int const y, int const z) const;
 
@@ -354,6 +356,7 @@ public:
     void process_mongroups();
     void spawn_hordes();
     void move_hordes();
+    void update_tracks();
 
     static bool obsolete_terrain( const std::string &ter );
     void convert_terrain( const std::unordered_map<tripoint, std::string> &needs_conversion );

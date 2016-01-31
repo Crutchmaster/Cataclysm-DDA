@@ -1282,6 +1282,11 @@ bool game::do_turn()
         overmap_buffer.process_mongroups();
         lua_callback("on_day_passed");
     }
+     tripoint loc = u.global_omt_location();
+        if (loc.z == 0) {
+            overmap &cur_om = get_cur_om();
+            cur_om.track(loc.x, loc.y) = true;
+        }
 
     // Move hordes every 5 min
     if( calendar::once_every(MINUTES(5)) ) {
@@ -1291,6 +1296,9 @@ bool game::do_turn()
         m.spawn_monsters( false );
     }
 
+    if (calendar::once_every(MINUTES(30))) {
+        overmap_buffer.update_tracks();
+    }
     u.update_body();
 
     // Auto-save if autosave is enabled

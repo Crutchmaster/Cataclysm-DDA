@@ -128,6 +128,7 @@ public:
     bool is_explored(int x, int y, int z);
     void toggle_explored(int x, int y, int z);
     bool seen(int x, int y, int z);
+    bool track(int x, int y, int z);
     void set_seen(int x, int y, int z, bool seen = true);
     bool has_npc(int x, int y, int z);
     bool has_vehicle(int x, int y, int z, bool require_pda = true);
@@ -292,6 +293,7 @@ public:
      * therefor you should probably call @ref map::spawn_monsters to spawn them.
      */
     void move_hordes();
+    void update_tracks();
     // hordes -- this uses overmap terrain coordinates!
     std::vector<mongroup*> monsters_at(int x, int y, int z);
     /**

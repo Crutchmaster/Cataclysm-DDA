@@ -484,6 +484,16 @@ void overmap::unserialize( std::ifstream &fin ) {
             }
             jsin.end_array();
             convert_terrain( needs_conversion );
+        } else if( name == "tracks") {
+            int x,y;
+            jsin.start_array();
+            while (!jsin.end_array()) {
+                jsin.start_array();
+                jsin.read(x);
+                jsin.read(y);
+                jsin.end_array();
+                layer[0].pl_track[x][y] = true;
+            }
         } else if( name == "region_id" ) {
             std::string new_region_id;
             jsin.read( new_region_id );
@@ -795,6 +805,19 @@ void overmap::serialize( std::ofstream &fout ) const
         fout << std::endl;
     }
     json.end_array();
+    json.member("tracks");
+    json.start_array();
+    for (int j = 0; j < OMAPY; j++) {
+        for (int i = 0; i < OMAPX; i++) {
+            if (layer[0].pl_track[i][j]) {
+                json.start_array();
+                json.write(i);
+                json.write(j);
+                json.end_array();
+            }
+        }
+    }
+    json.end_array();
 
     // temporary, to allow user to manually switch regions during play until regionmap is done.
     json.member("region_id", settings.id);
@@ -887,6 +910,7 @@ void mongroup::serialize(JsonOut &json) const
     json.start_object();
     json.member("type", type.str());
     json.member("pos", pos);
+    json.member("direction", direction);
     json.member("radius", radius);
     json.member("population", population);
     json.member("diffuse", diffuse);
@@ -913,6 +937,8 @@ void mongroup::deserialize(JsonIn &json)
             type = mongroup_id(json.get_string());
         } else if( name == "pos" ) {
             pos.deserialize(json);
+        } else if( name == "direction") {
+            direction.deserialize(json);
         } else if( name == "radius" ) {
             radius = json.get_int();
         } else if( name == "population" ) {
