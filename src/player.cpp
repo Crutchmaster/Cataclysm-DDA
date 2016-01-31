@@ -5478,7 +5478,7 @@ void player::get_sick()
         has_effect("sleep") ? 0 : -1;
     depr_morale = depr_morale > 50 ? 50 : depr_morale;
     depr_morale = depr_morale < -250 ? -250 : depr_morale;
-    add_msg("Set depr: %d avg_morale: %d", depr_morale, avg_morale);
+    //add_msg("Set depr: %d avg_morale: %d", depr_morale, avg_morale);
     avg_morale = 0;
 
     // NPCs are too dumb to handle infections now
