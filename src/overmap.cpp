@@ -2466,7 +2466,6 @@ void mongroup::wander( overmap &om )
     const city *target_city = nullptr;
     int target_distance = 0;
     if( horde_behaviour == "roam" && one_in(10)) {
-    if( horde_behaviour == "roam" && one_in(3)) {
         horde_behaviour = "travel";
     }
 
@@ -2574,7 +2573,7 @@ void overmap::move_hordes()
         }
 
         tripoint pl = g->u.global_omt_location();
-        if ( abs(mg.pos.x - pl.x * 2) < 5 && abs(mg.pos.y - pl.y * 2) < 5 && pl.z == 0) {
+        if ( abs(mg.pos.x - pl.x * 2) < 8 && abs(mg.pos.y - pl.y * 2) < 8  ) {
             mg.target.x = pl.x * 2 + rng(-3, 3);
             mg.target.y = pl.y * 2 + rng(-3, 3);
             mg.interest = 40;
