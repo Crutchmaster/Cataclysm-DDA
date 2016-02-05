@@ -314,6 +314,8 @@ class player : public Character, public JsonSerializer, public JsonDeserializer
         bool sight_impaired() const;
         /** Returns true if the player has two functioning arms */
         bool has_two_arms() const;
+        /** Returns true if arms are ok */
+        bool arms_ok() const;
         /** Returns true if the player is wielding something, including bionic weapons */
         bool is_armed() const;
         /** Calculates melee weapon wear-and-tear through use, returns true */

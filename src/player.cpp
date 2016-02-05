@@ -4240,6 +4240,11 @@ bool player::has_two_arms() const
  return true;
 }
 
+bool player::arms_ok() const
+{
+    return hp_cur[hp_arm_l] > 10 || hp_cur[hp_arm_r] > 10;
+}
+
 bool player::avoid_trap( const tripoint &pos, const trap &tr ) const
 {
     ///\EFFECT_DEX increases chance to avoid traps

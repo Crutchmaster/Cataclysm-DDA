@@ -254,6 +254,11 @@ void player::melee_attack(Creature &t, bool allow_special, const matec_id &force
         t.add_effect("hit_by_player", 100); // Flag as attacked by us for AI
     }
 
+    if (!arms_ok()) {
+        add_msg_if_player(_("You can't attack with both crippled arms."));
+        return;
+    }
+
     const bool critical_hit = scored_crit( t.dodge_roll() );
 
     int move_cost = attack_speed( weapon );
