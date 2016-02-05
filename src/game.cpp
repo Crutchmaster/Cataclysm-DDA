@@ -1283,9 +1283,11 @@ bool game::do_turn()
         lua_callback("on_day_passed");
     }
      tripoint loc = u.global_omt_location();
-        if (loc.z == 0) {
+     if (loc.z == 0) {
+            int x = loc.x, y = loc.y;
+            overmap_buffer.omt_to_om_remain(x, y);
             overmap &cur_om = get_cur_om();
-            cur_om.track(loc.x, loc.y) = true;
+            cur_om.track(x, y) = true;
         }
 
     // Move hordes every 5 min
