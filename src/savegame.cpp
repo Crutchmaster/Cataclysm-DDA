@@ -529,6 +529,21 @@ void overmap::unserialize( std::ifstream &fin ) {
                 }
                 cities.push_back( new_city );
             }
+        } else if( name == "horde_targets")  {
+            jsin.start_array();
+            while ( !jsin.end_array() ) {
+                jsin.start_object();
+                city new_target;
+                while (! jsin.end_object()) {
+                    std::string member_name = jsin.get_member_name();
+                    if( member_name == "x") {
+                        jsin.read(new_target.x);
+                    } else if ( member_name == "y") {
+                        jsin.read(new_target.y);
+                    }
+                }
+                horde_targets.push_back(new_target);
+            }
         } else if( name == "roads_out" ) {
             jsin.start_array();
             while( !jsin.end_array() ) {
@@ -839,6 +854,17 @@ void overmap::serialize( std::ofstream &fout ) const
         json.member("x", i.x);
         json.member("y", i.y);
         json.member("size", i.s);
+        json.end_object();
+    }
+    json.end_array();
+    fout << std::endl;
+
+    json.member("horde_targets");
+    json.start_array();
+    for( auto &i : horde_targets) {
+        json.start_object();
+        json.member("x", i.x);
+        json.member("y", i.y);
         json.end_object();
     }
     json.end_array();

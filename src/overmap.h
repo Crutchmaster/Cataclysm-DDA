@@ -311,6 +311,7 @@ public:
   std::vector<npc *> npcs;
   std::map<int, om_vehicle> vehicles;
   std::vector<city> cities;
+  std::vector<city> horde_targets;
   std::vector<city> roads_out;
 
  private:

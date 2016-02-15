@@ -2472,7 +2472,7 @@ void mongroup::wander( overmap &om )
     if( horde_behaviour == "city" ) {
         // Find a nearby city to return to..
 
-        for(const city &check_city : om.cities ) {
+        for(const city &check_city : om.horde_targets ) {
             // Check if this is the nearest city so far.
             int distance = rl_dist( check_city.x * 2, check_city.y * 2, pos.x, pos.y );
             if( !target_city || distance < target_distance ) {
@@ -2481,9 +2481,12 @@ void mongroup::wander( overmap &om )
             }
         }
     } else if ( horde_behaviour == "travel" ) {
-        int cnt = om.cities.size();
-        if (!target_city) {
-            target_city = &om.cities[rng(0,cnt-1)];
+        int cnt = om.horde_targets.size();
+        if (!target_city && cnt > 0) {
+            int city_n = rng(0,cnt-1);
+            if (city_n >= 0) {
+                target_city = &om.horde_targets[city_n];
+            }
         }
     } else if( horde_behaviour == "track") {
         if (!one_in(10)) {
@@ -2973,6 +2976,7 @@ void overmap::place_cities()
             tmp.y = cy;
             tmp.s = size;
             cities.push_back(tmp);
+            horde_targets.push_back(tmp);
             int start_dir = rng(0, 3);
             for (int j = 0; j < 4; j++) {
                 make_road(cx, cy, size, (start_dir + j) % 4, tmp);
@@ -4171,6 +4175,7 @@ void overmap::place_special(const overmap_special& special, const tripoint& p, i
 {
     //std::map<std::string, tripoint> connections;
     std::vector<std::pair<std::string, tripoint> > connections;
+    bool target = false;
 
     for( const overmap_special_terrain& terrain : special.terrains ) {
         const oter_id id( terrain.terrain );
@@ -4178,6 +4183,10 @@ void overmap::place_special(const overmap_special& special, const tripoint& p, i
 
         const tripoint rp = rotate_tripoint(terrain.p, rotation);
         const tripoint location = p + rp;
+
+        if (special.flags.find("HORDE_TARGET") != special.flags.end()) {
+            target = true;
+        }
 
         if(!t.has_flag(rotates)) {
             this->ter(location.x, location.y, location.z) = terrain.terrain;
@@ -4198,6 +4207,14 @@ void overmap::place_special(const overmap_special& special, const tripoint& p, i
                 }
             }
         }
+    }
+
+    if (target) {
+        city tmp;
+        tmp.x = p.x;
+        tmp.y = p.y;
+        tmp.s = 0;
+        horde_targets.push_back(tmp);
     }
 
     for( const auto& connection : connections ) {
