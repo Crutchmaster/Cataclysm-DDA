@@ -720,7 +720,7 @@ int player::calc_focus_equilibrium() const
     int eff_morale = morale_level() - pain;
     // Cenobites don't mind, though
     if (has_trait("CENOBITE")) {
-        eff_morale = eff_morale + pain;
+        eff_morale += pain;
     }
     int focus_gain_rate = 100;
 
