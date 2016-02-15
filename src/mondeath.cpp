@@ -347,12 +347,12 @@ void mdeath::guilt(monster *z)
 
 void mdeath::satisfaction(monster *z) {
     if (!z->type->in_species( ZOMBIE )) return;
-    int bonus = 1;
+    int bonus = 3;
     bonus += g->u.has_trait("PSYCHOPATH") ||
         g->u.has_trait("PRED3") ||
-        g->u.has_trait("PRED4") ? 2 :
+        g->u.has_trait("PRED4") ? 5 :
         g->u.has_trait("PRED1") ||
-        g->u.has_trait("PRED2") ? 1 : 0;
+        g->u.has_trait("PRED2") ? 3 : 0;
     int max_bonus = bonus * 50;
     g->u.add_morale(MORALE_ZOMBIE_KILLING, bonus, max_bonus, 5, 3, true);
 }

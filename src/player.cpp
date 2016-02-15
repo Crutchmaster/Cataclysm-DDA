@@ -9874,6 +9874,12 @@ bool player::eat(item *eaten, const it_comest *comest)
         debugmsg("player::eat(%s); comest is NULL!", eaten->tname().c_str());
         return false;
     }
+
+    if (morale_level() < -200) {
+        add_msg_if_player(_("What point of live?"));
+        return false;
+    }
+
     if (comest->tool != "null") {
         bool has = has_amount(comest->tool, 1);
         if( item::count_by_charges( comest->tool ) ) {
