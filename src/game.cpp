@@ -10669,6 +10669,11 @@ void game::plthrow(int pos)
         return;
     }
 
+    if (!u.arms_ok()) {
+        add_msg(m_info, _("You can't throw with both crippled arms."));
+        return;
+    }
+
     if (pos == INT_MIN) {
         pos = inv(_("Throw item:"));
         refresh_all();
@@ -10797,6 +10802,11 @@ void game::plfire( bool burst, const tripoint &default_target )
             return;
         }
     }
+
+    if (!u.arms_ok()) {
+        add_msg(m_info, _("You can't fire with both crippled arms."));
+    }
+
     // Use vehicle turret or draw a pistol from a holster if unarmed
     if( !u.is_armed() ) {
         // Vehicle turret first, if on our tile
