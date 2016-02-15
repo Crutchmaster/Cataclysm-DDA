@@ -30,6 +30,12 @@ struct dream {
     }
 };
 
+struct stat_mod {
+    t_stat stat;
+    bool multiple;
+    float value;
+};
+
 struct mutation_branch {
     using MutationMap = std::unordered_map<std::string, mutation_branch>;
     // True if this is a valid mutation (False for "unavailable from generic mutagen").
@@ -67,9 +73,11 @@ struct mutation_branch {
     std::vector<std::string> replacements; // Mutations that replace this one
     std::vector<std::string> additions; // Mutations that add to this one
     std::vector<std::string> category; // Mutation Categories
+    std::vector<std::string> tags;
     std::map<body_part, tripoint> protection; // Mutation wet effects
     /** Key pair is <active: bool, mod type: "STR"> */
     std::unordered_map<std::pair<bool, std::string>, int> mods; // Mutation stat mods
+    std::map<t_stat, stat_mod> stat_mods; //misc stat mods
     std::vector<matype_id>
     initial_ma_styles; // Martial art styles that can be chosen upon character generation
     std::string name;

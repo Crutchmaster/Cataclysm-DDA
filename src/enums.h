@@ -173,6 +173,11 @@ enum object_type {
     NUM_OBJECTS,
 };
 
+enum t_stat {
+    STAT_MOVECOST = 0,
+    NUM_STATS
+};
+
 struct point : public JsonSerializer, public JsonDeserializer {
     int x;
     int y;

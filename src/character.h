@@ -169,6 +169,8 @@ class Character : public Creature
         // In mutation.cpp
         /** Returns true if the player has the entered trait */
         virtual bool has_trait(const std::string &flag) const override;
+        /** Returns true if the playes has the entered trait flag */
+        virtual bool has_trait_flag(const std::string &flag) const;
         /** Returns true if the player has the entered starting trait */
         bool has_base_trait(const std::string &flag) const;
         /** Returns the trait id with the given invlet, or an empty string if no trait has that invlet */

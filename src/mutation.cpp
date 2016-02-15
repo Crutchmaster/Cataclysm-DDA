@@ -27,6 +27,19 @@ bool Character::has_trait(const std::string &b) const
     return my_mutations.count( b ) > 0;
 }
 
+bool Character::has_trait_flag(const std::string &b) const
+{
+    for ( auto &mut : my_mutations ) {
+        mutation_branch mb = mutation_branch::get( mut.first );
+        for (auto &tag : mb.tags) {
+            if (tag == b) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 bool Character::has_base_trait(const std::string &b) const
 {
     // Look only at base traits
